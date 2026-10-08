@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ import com.example.listycity.ui.theme.ListyCityTheme
 fun CityListScreen(
     cities: List<City>,
     onAddCity: (City) -> Unit,
+    onDeleteCity: (City) -> Unit,
     onUpdateCity: (City, City) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -154,7 +156,24 @@ fun CityListScreen(
                     Text("UPDATE CITY")
                 }
             }
+            Button(
+                modifier = Modifier.padding(vertical = 12.dp).align(Alignment.CenterHorizontally),
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors( containerColor = androidx.compose.material3.MaterialTheme.colorScheme.error),
+                onClick = {
+                    val cityToDelete = selectedCity
+                    if (cityToDelete != null) {
+                        onDeleteCity(cityToDelete)
+                        selectedCity = null
+                    }
+                }
+
+            ) {
+                Text("DELETE CITY")
+            }
+
+
         }
+        HorizontalDivider()
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             itemsIndexed(cities) { index, city ->
                 CityRow(
@@ -213,7 +232,8 @@ fun CityListScreenPreview() {
                 City("Calgary", "AB")
             ),
             onAddCity = {},
-            onUpdateCity = { _, _ -> }
+            onUpdateCity = { _, _ -> },
+            onDeleteCity = {}
         )
     }
 }
